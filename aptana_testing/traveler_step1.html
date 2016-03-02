@@ -1,0 +1,188 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>new traveler</title>
+		<link href="main.css" rel="stylesheet" />
+		<style>
+
+        * {
+            line-height: 1.2;
+            margin: 0;
+        }
+
+        html {
+            color: #888;
+            display: table;
+            font-family: sans-serif;
+            height: 100%;
+            text-align: center;
+            width: 100%;
+        }
+
+        body {
+            display: table-cell;
+            vertical-align: middle;
+            margin: 2em auto;
+        }
+
+        h1 {
+            color: #555;
+            font-size: 2em;
+            font-weight: 400;
+        }
+
+        p {
+            margin: 0 auto;
+            width: 280px;
+        }
+
+        @media only screen and (max-width: 280px) {
+
+            body, p {
+                width: 95%;
+            }
+
+            h1 {
+                font-size: 1.5em;
+                margin: 0 0 0.3em;
+            }
+
+        }
+
+    </style>
+	</head>
+	<body>
+			<h1>new traveler</h1>
+			<div id="form-messages"></div>
+			<link rel="stylesheet" href="style.css">
+			<form id="ajax-contact" name="NewInstTravForm" method="post" autocomplete="off"  action="mailer.php">
+				<input type="hidden" value="<?php echo $modelNumber; ?>" name="ModelNumber" />
+				<fieldset>
+					<table>
+						<tr>
+							<th align="center">Model Type</th>
+							<td align="center">
+								<input class="radiostyle right" type="radio" id="idModelType1" name="Model" value="106"/>
+									<label for="idModelType1" class="cModel">106</label>
+								<input class="radiostyle right" type="radio" id="idModelType2" name="Model" value="202"/>
+									<label for="idModelType2" class="cModel">202</label>
+								<input class="radiostyle right" type="radio" id="idModelType3" name="Model" value="205"/>
+									<label for="idModelType3" class="cModel">205</label>
+								<input class="radiostyle right" type="radio" id="idModelType4" name="Model" value="211"/>
+									<label for="idModelType4" class="cModel">211</label>
+								<input class="radiostyle right" type="radio" id="idModelType5" name="Model" value="306"/>
+									<label for="idModelType5" class="cModel">306</label>
+								<input class="radiostyle right" type="radio" id="idModelType6" name="Model" value="401"/>
+									<label for="idModelType6" class="cModel">401</label>
+								<input class="radiostyle right" type="radio" id="idModelType7" name="Model" value="405"/>
+									<label for="idModelType7" class="cModel">405</label>
+								<input class="radiostyle right" type="radio" id="idModelType8" name="Model" value="408"/>
+									<label for="idModelType8" class="cModel">408</label>
+								<input class="radiostyle right" type="radio" id="idModelType9" name="Model" value="410"/>
+									<label for="idModelType9" class="cModel">410</label>
+								<input class="radiostyle right" type="radio" id="idModelType10" name="Model" value="POM"/>
+									<label for="idModelType10" class="cModel">POM</label>
+								<input class="radiostyle right" type="radio" id="idModelType11" name="Model" value="FEM"/>
+									<label for="idModelType11" class="cModel">FEM</label>
+								<input class="radiostyle right" type="radio" id="idModelType12" name="Model" value="UV100"/>
+									<label for="idModelType12" class="cModel">UV100</label>
+							</td>
+						</tr>
+						<tr>
+							<th align="center">Instrument Serial Number:</th>
+							<td align="left"><input type="text" class="cInstTravText" name="SerialNumber" id="idSerialNumber"/></td>
+							<button onclick="drop_check()">comfirm</button>
+
+							<p id="drop_check"></p>
+
+							<script>
+							function drop_check() {
+							    var x;
+							    if (confirm("transfer and send email!") == true) {
+						        x = "transfered and email sent!";
+							    } else {
+						        x = "You pressed Cancel!";
+							    }
+							    document.getElementById("drop_check").innerHTML = x;
+							}
+							</script>
+						</tr>
+					</table>
+				</fieldset>
+			</form>
+			<script src="jquery-2.1.0.min.js"></script>
+			<script src="app.js"></script>
+			<script>
+				document.getElementById('idTACustParts').style.display = 'none';
+				document.getElementById('idTAReWork').style.display = 'none';
+				document.getElementById("idCheckSerialNumber").style.display = 'none';
+				
+				function checkSerialNum()
+				{
+					var modelNum = "<?php echo $modelNumber; ?>";
+					var proposedSerialNum = document.getElementById("idSerialNumber").value;
+					if(proposedSerialNum != "")
+					{
+						var value = $.ajax({
+							type: "POST",
+							url: "<?php echo $_SESSION['RCTAjaxLocation'];?>",
+							data: "modelNum="+ modelNum+ " &serialNum="+ proposedSerialNum+ " &travType=instrument",
+							async: false
+						}).responseText;
+						
+						if (value == "fail")
+						{
+							var alertStr = proposedSerialNum + " has already been assigned for this model!";
+							document.getElementsByName("infoSerialNumNote")[0].value = alertStr;
+							document.getElementsByName("infoSerialNumNote")[0].setAttribute('size', alertStr.length);
+							document.getElementById("idInfoSerialNumNote").style.display = 'block';
+							document.getElementById("idCheckSerialNumber").style.display = 'block';
+							document.getElementById("idSerialNumber").focus();
+							document.getElementById("idSubmitNewInstTraveler").style.display = 'none';
+						}
+						else
+						{
+							document.getElementById("idInfoSerialNumNote").style.display = 'none';
+							document.getElementById("idCheckSerialNumber").style.display = 'none';
+							document.getElementById("idSubmitNewInstTraveler").style.display = 'block';
+						}
+					}
+				}
+						
+				function yesnoNote()
+				{
+					if(document.getElementById('idStdInstYes').checked) 
+					{
+						document.getElementById('idTACustParts').style.display = 'none';
+					}
+					
+					if(document.getElementById('idStdInstNo').checked)
+					{
+						document.getElementById('idTACustParts').style.display = 'block';
+					}
+					
+					if(document.getElementById('idReWorkYes').checked) 
+					{
+						document.getElementById('idTAReWork').style.display = 'block';
+					}
+					
+					if(document.getElementById('idReWorkNo').checked)
+					{
+						document.getElementById('idTAReWork').style.display = 'none';
+					}
+				}
+				
+				function clearInputFields()
+				{
+					 document.getElementById("idNewInstTravForm").reset();
+				}
+				
+				function GoToTop()
+				{
+					parent.$("html, body").animate({ scrollTop: 0 }, "slow");
+				}
+			</script>
+	</body>
+</html>

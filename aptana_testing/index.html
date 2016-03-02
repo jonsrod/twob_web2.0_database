@@ -1,0 +1,76 @@
+<?php
+	include('login.php'); // Includes Login Script
+
+	if(isset($_SESSION['login_user'])){
+	header("location: profile.php");
+}
+?>
+<!DOCTYPE html>
+	<html>
+	<head>
+		<title>Login  title page </title>
+		<link href="style.css" rel="stylesheet" type="text/css">
+	<style>
+	        * {
+	            line-height: 1.2;
+	            margin: 0;
+	        }
+	
+	        html {
+	            color: #56;
+	            display: table;
+	            font-family: sans-serif;
+	            height: 100%;
+	            text-align: center;
+	            width: 100%;
+	        }
+	
+	        body {
+	            display: table-cell;
+	            vertical-align: middle;
+	            margin: 2em auto;
+	        }
+	
+	        h1 {
+	            color: #674;
+	            font-size: 2em;
+	            font-weight: 400;
+	        }
+	
+	        p {
+	            margin: 0 auto;
+	            width: 280px;
+	        }
+	
+	        @media only screen and (max-width: 280px) {
+	
+	            body, p {
+	                width: 95%;
+	            }
+	
+	            h1 {
+	                font-size: 1.5em;
+	                margin: 0 0 0.3em;
+	            }
+	
+	        }
+	
+	        </style>
+	</head>
+	<body>
+		<div id="main">
+		<h1>2b technoloies login for insrument traveler</h1>
+			<div id="login">
+			<h2>Login here</h2>
+			<form action="" method="post">
+			<label>UserName :</label>
+				<input id="name" name="username" placeholder="username" type="text">
+				<label>Password :</label>
+				<input id="password" name="password" placeholder="**********" type="password">
+				<input name="submit" type="submit" value=" Login ">
+			<span><?php echo $error; ?></span>
+			</form>
+			</div>
+		</div>
+	</body>
+</html>
